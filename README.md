@@ -1,60 +1,173 @@
-# Forest Fire Burn Area Predictor
+# 🌲 Forest Fire Burn Area Predictor
 
-This is a containerized FastAPI application that predicts the burn area of forest fires based on meteorological and geographical inputs. 
-The application uses a pre-trained Keras model and provides an interactive web interface for making predictions.
+A **FastAPI-based machine learning web application** that predicts the
+**burn area of forest fires** using meteorological and geographical
+features.\
+This project includes an intuitive HTML interface, a pre-trained Keras
+model, and fully containerized deployment using Docker.
 
-## Technologies Used:
-FastAPI: Backend framework for building APIs.
-TensorFlow/Keras: Framework for the pre-trained model.
-Jinja2: Template engine for rendering HTML pages.
-Docker: For containerized deployment.
+------------------------------------------------------------------------
 
-## Project Structure:
-forest_fire_project/
-│
-├── app/
-│   ├── main.py               # FastAPI Main application 
-│   ├── templates/            # HTML templates for the app
-│   │   ├── index.html        # Form for user input
-│   │   └── result.html       # Displays prediction results
-│   ├── static/               # Static files (CSS, images, etc.)
-│   └── forest_fire_model.keras  # Pre-trained Keras model
-├── Dockerfile                # Docker configuration
-├── requirements.txt          # List of Python dependencies
-└── README.md                 # Documentation
+## 🔥 Overview
 
-## Local Setup Without Docker
-Step1: Navigate to the forest_fire_project directory
-Step2: Install dependencies: pip install -r requirements.txt
-Step3: cd app
-Step4: Run the application: uvicorn main:app --host 0.0.0.0 --port 8000
+Forest fires can lead to extensive environmental and economic losses.
+Predicting the burn area helps in resource allocation, planning, and
+early response measures.
 
+This application provides:
 
-## Setup Using Docker
-Step1: Navigate to the forest_fire_project directory
-Step2: Build the Docker image: docker build -t forest_fire_predict .
-Step3: Run the Docker container: docker run --name forest_fire -p 8000:8000 forest_fire_predict
-Step4: Access the application: Open your browser and navigate to http://0.0.0.0:8000 
+-   ⚡ A high-performance **FastAPI** backend\
+-   🔍 Burn area predictions using a **Keras regression model**\
+-   🎨 A clean **Jinja2 UI** for user inputs\
+-   🐳 **Docker support** for easy deployment\
+-   🧮 Support for a **custom MSE loss function** used during model
+    training
 
-## Usage
-Launch the application in your browser at http://0.0.0.0:8000
-Fill in the required fields:
-X, Y: Spatial coordinates.
-Month, Day: Temporal information.
-FFMC, DMC, DC, ISI: Meteorological indexes.
-Temp, RH, Wind, Rain: Weather conditions.
-Click Submit to get the predicted burn area.
+------------------------------------------------------------------------
 
-## Custom Loss Function:
-The model uses a custom mean squared error (MSE) function during training and evaluation
-def mse(y_true, y_pred):
-    return K.mean(K.square(y_true - y_pred), axis=-1)
-The custom function is registered and passed while loading the model
-model = load_model(model_path, custom_objects={'mse': mse})
+## 🏗 Project Structure
 
-## Troubleshooting
-1.Model File Not Found: Ensure forest_fire_model.keras is present in the app/ directory.
-2.Custom Function Error: If encountering issues with mse, verify that it is correctly defined and passed to load_model.
-3.Docker Port Conflict: If port 8000 is in use, modify the -p flag during container run:
+    forest_fire_project/
+    │
+    ├── app/
+    │   ├── main.py                 # FastAPI application entry point
+    │   ├── forest_fire_model.keras # Pre-trained Keras model
+    │   ├── templates/              # HTML templates for the app
+    │   │   ├── index.html          # User input form
+    │   │   └── result.html         # Prediction results page
+    │   └── static/                 # CSS, images, JS
+    │
+    ├── Dockerfile                  # Docker build configuration
+    ├── requirements.txt            # Python dependencies
+    └── README.md                   # Project documentation
+
+------------------------------------------------------------------------
+
+## 🧠 Technologies Used
+
+  Technology               Purpose
+  ------------------------ ----------------------------
+  **FastAPI**              Backend API framework
+  **TensorFlow / Keras**   Model training & inference
+  **Jinja2**               HTML template rendering
+  **Uvicorn**              ASGI server
+  **Docker**               Containerized deployment
+  **Python 3.x**           Programming language
+
+------------------------------------------------------------------------
+
+## 🚀 Run Locally (Without Docker)
+
+### 1️⃣ Navigate to project directory
+
+``` bash
+cd forest_fire_project
+```
+
+### 2️⃣ Install dependencies
+
+``` bash
+pip install -r requirements.txt
+```
+
+### 3️⃣ Enter the app folder
+
+``` bash
+cd app
+```
+
+### 4️⃣ Start the FastAPI server
+
+``` bash
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+### 5️⃣ Access the application
+
+Open in browser:
+
+    http://0.0.0.0:8000
+
+------------------------------------------------------------------------
+
+## 🐳 Run Using Docker
+
+### 1️⃣ Build the Docker image
+
+``` bash
+docker build -t forest_fire_predict .
+```
+
+### 2️⃣ Run the container
+
+``` bash
+docker run --name forest_fire -p 8000:8000 forest_fire_predict
+```
+
+### 3️⃣ Access the app
+
+    http://0.0.0.0:8000
+
+### Optional --- If port 8000 is busy:
+
+``` bash
 docker run --name forest_fire -p 8080:8000 forest_fire_predict
-4.Dependencies Issue: If you face any dependency errors, ensure all libraries in requirements.txt are installed correctly.
+```
+
+------------------------------------------------------------------------
+
+## 🌦 Input Features
+
+The model predicts burn area based on the following:
+
+### 📍 Geographical Inputs
+
+-   **X** --- X-axis coordinate\
+-   **Y** --- Y-axis coordinate
+
+### 🗓 Temporal Inputs
+
+-   **Month** --- Month of occurrence\
+-   **Day** --- Day of the week
+
+### 🔥 Fire Weather Indexes
+
+-   **FFMC** --- Fine Fuel Moisture Code\
+-   **DMC** --- Duff Moisture Code\
+-   **DC** --- Drought Code\
+-   **ISI** --- Initial Spread Index
+
+### 🌡 Weather Conditions
+
+-   **Temp** --- Temperature\
+-   **RH** --- Relative humidity\
+-   **Wind** --- Wind speed\
+-   **Rain** --- Rainfall
+
+------------------------------------------------------------------------
+
+## 🛠 Troubleshooting
+
+### 🔴 Model file not found
+
+Make sure `forest_fire_model.keras` is located in:
+
+    forest_fire_project/app/
+
+### 🔴 Docker port issues
+
+Use a different port:
+
+``` bash
+docker run -p 8080:8000 forest_fire_predict
+```
+
+### 🔴 Missing dependencies
+
+Reinstall:
+
+``` bash
+pip install -r requirements.txt
+```
+
+------------------------------------------------------------------------
